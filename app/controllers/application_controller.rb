@@ -6,9 +6,9 @@ class ApplicationController < ActionController::Base
   end
 
   def calculate_square
-   # params: {"elephant"=>"234"}
+   # params: {"number"=>"234"}
 
-   @num = params.fetch("elephant").to_f
+   @num = params.fetch("number").to_f
    @square_of_num = @num ** 2
     
    render({:template => "calculation_templates/square_results.html.erb"})
@@ -24,6 +24,9 @@ class ApplicationController < ActionController::Base
 
   def calculate_square_root
     
+    @num = params.fetch("number").to_f
+    @square_root_of_num = @num ** (1/2.0)
+     
     render({:template => "calculation_templates/square_root_results.html.erb"})
   end
 
@@ -36,8 +39,19 @@ class ApplicationController < ActionController::Base
   end
 
   def calculate_payment
+    @apr = params.fetch("apr").to_f
+    @years = params.fetch("years").to_f
+    @years = @years*12
+    @pv = params.fetch("pv").to_f
+    @r = ((@apr/100)/12).to_f
+
+    @p1 = (@r*@pv)
+    @p2 = (1+@r)**(-@years)
+    @payment = (@p1/(1-(@p2)))
+
     render({:template => "calculation_templates/payment_results.html.erb"})
   end
+  
 
   
 
@@ -48,6 +62,11 @@ class ApplicationController < ActionController::Base
   end
 
   def calculate_random
+    
+    @lower = params.fetch("user_min").to_f
+    @upper = params.fetch("user_max").to_f
+    @random = rand(@lower..@upper)
+
     render({:template => "calculation_templates/random_results.html.erb"})
   end
 
